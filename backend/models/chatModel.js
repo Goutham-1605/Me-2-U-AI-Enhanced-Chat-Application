@@ -9,7 +9,8 @@ const chatModel= mongoose.Schema({
     },],
     latestMessage:{type:mongoose.Schema.Types.ObjectId,
     ref:"message"},
-    groupAdmin:{type:mongoose.Schema.Types.ObjectId,ref:"User"}
+    groupAdmin:{type:mongoose.Schema.Types.ObjectId,ref:"User"},
+    pinnedMessage: { type: mongoose.Schema.Types.ObjectId, ref: "message" }
 }
 ,{
     timestamps:true

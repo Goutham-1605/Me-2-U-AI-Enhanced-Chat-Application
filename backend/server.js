@@ -8,6 +8,7 @@ const cors = require('cors');
 dotenv.config({ path: path.join(__dirname, '../.env') });
 const connectDB = require('./config/db');
 connectDB();
+const { getAIResponse } = require('./utils/aiBot');
 
 const userRoutes = require('./routes/userRoutes');
 const chatRoutes = require('./routes/chatRoutes');
@@ -56,14 +57,93 @@ io.on("connection", (socket) => {
     console.log("User joined chat room:", room);
   });
 
-  socket.on("new message", (newMessageReceived) => {
-    const chat = newMessageReceived.Chat;
-    if (!chat.users) return;
-    chat.users.forEach((user) => {
-      if (user._id === newMessageReceived.sender._id) return;
-      socket.in(user._id).emit("message received", newMessageReceived);
-    });
+  socket.on("new message", async (newMessageReceived) => {
+  const chat = newMessageReceived.Chat;
+  if (!chat.users) return;
+
+
+  chat.users.forEach((user) => {
+    if (user._id === newMessageReceived.sender._id) return;
+    socket.in(user._id).emit("message received", newMessageReceived);
   });
+
+  
+  const messageContent = newMessageReceived.content;
+  if (messageContent && messageContent.toLowerCase().includes("@ai")) {
+    try {
+      const query = messageContent.replace(/@ai/gi, "").trim();
+
+      
+      chat.users.forEach((user) => {
+        socket.in(user._id).emit("botTyping", { isTyping: true });
+      });
+
+      
+      socket.emit("botTyping", { isTyping: true });
+
+      
+      const aiReply = await getAIResponse(
+        chat._id,         
+        query,             
+        newMessageReceived.sender.name  
+      );
+
+    
+      chat.users.forEach((user) => {
+        socket.in(user._id).emit("botTyping", { isTyping: false });
+      });
+      socket.emit("botTyping", { isTyping: false });
+
+      
+      const botMessage = {
+        _id: `bot-${Date.now()}`,
+        sender: {
+          _id: "ai-bot",
+          name: "🤖 AI Assistant",
+          pic: "https://cdn-icons-png.flaticon.com/512/4712/4712109.png",
+        },
+        content: aiReply,
+        Chat: chat,
+        createdAt: new Date().toISOString(),
+        isBot: true,
+      };
+
+      
+      chat.users.forEach((user) => {
+        socket.in(user._id).emit("message received", botMessage);
+      });
+      socket.emit("message received", botMessage);
+
+    } catch (error) {
+      console.error("Gemini error:", error.message);
+
+      
+      chat.users.forEach((user) => {
+        socket.in(user._id).emit("botTyping", { isTyping: false });
+      });
+      socket.emit("botTyping", { isTyping: false });
+
+      
+      const errorMessage = {
+        _id: `bot-err-${Date.now()}`,
+        sender: {
+          _id: "ai-bot",
+          name: "🤖 AI Assistant",
+          pic: "https://cdn-icons-png.flaticon.com/512/4712/4712109.png",
+        },
+        content: "Sorry, I couldn't process that. Try again!",
+        Chat: chat,
+        createdAt: new Date().toISOString(),
+        isBot: true,
+      };
+
+      chat.users.forEach((user) => {
+        socket.in(user._id).emit("message received", errorMessage);
+      });
+      socket.emit("message received", errorMessage);
+    }
+  }
+});
 
 
   socket.on("group updated", (updatedChat) => {
