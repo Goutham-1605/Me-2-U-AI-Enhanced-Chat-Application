@@ -4,7 +4,7 @@ import { toaster } from '../ui/toaster';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { ChatState } from '../../Context/chatProvider';
-import { API_URL } from '../../config';
+import { API_URL } from '../../configtemp';
 
 const Login = () => {
   const [Email , SetEmail]= useState()
