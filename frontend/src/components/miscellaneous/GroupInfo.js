@@ -7,7 +7,7 @@ import {
 import axios from 'axios';
 import { ChatState } from '../../Context/chatProvider';
 import { toaster } from '../ui/toaster';
-import { API_URL } from '../../config';
+import { API_URL } from '../../configuration';
 
 const GroupInfoModal = ({ children }) => {
   const socket = io(API_URL);

@@ -4,7 +4,7 @@ import { VStack, Field, Input, FieldRequiredIndicator, InputGroup, Button } from
 import { toaster } from '../ui/toaster';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
-import { API_URL } from '../../config';
+import { API_URL } from '../../configuration';
 
 const SignUp = () => {
   const [Name, SetName] = useState()

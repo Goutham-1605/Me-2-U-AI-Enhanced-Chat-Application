@@ -4,7 +4,7 @@ import axios from 'axios';
 import io from 'socket.io-client';
 import { ChatState } from '../Context/chatProvider';
 import GroupInfoModal from './miscellaneous/GroupInfo';
-import { API_URL } from '../../config';
+import { API_URL } from '../configuration';
 
 const ENDPOINT = API_URL;
 let socket, selectedChatCompare;

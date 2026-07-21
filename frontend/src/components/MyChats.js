@@ -5,7 +5,7 @@ import { ChatState } from '../Context/chatProvider';
 import { toaster } from './ui/toaster';
 import { FiPlus } from "react-icons/fi";
 import GroupChatModal from './miscellaneous/GroupChat';
-import { API_URL } from '../../config';
+import { API_URL } from '../configuration';
 
 const MyChats = () => {
   const {

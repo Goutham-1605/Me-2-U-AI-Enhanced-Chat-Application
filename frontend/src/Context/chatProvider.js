@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import { API_URL } from '../config';
+import { API_URL } from '../configuration';
 
 const ChatContext = createContext();
 
