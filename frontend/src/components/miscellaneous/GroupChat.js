@@ -10,7 +10,7 @@ import {
 import axios from 'axios';
 import { ChatState } from '../../Context/chatProvider';
 import { toaster } from '../ui/toaster';
-import { API_URL } from '../../configtemp';
+import { API_URL } from '../../config';
 
 const GroupChatModal = ({ children }) => {
   const [open, setOpen] = useState(false);

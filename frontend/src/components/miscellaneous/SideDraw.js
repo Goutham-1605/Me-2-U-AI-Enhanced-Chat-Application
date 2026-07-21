@@ -8,7 +8,7 @@ import { ChatState } from '../../Context/chatProvider';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { toaster } from '../ui/toaster';
-import { API_URL } from '../../configtemp';
+import { API_URL } from '../../config';
 
 const SideDrawer = () => {
   const [search, setSearch] = useState("");
