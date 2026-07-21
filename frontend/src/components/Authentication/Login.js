@@ -68,6 +68,7 @@ history.push("/chats");
               
               <Input 
                 placeholder="Enter Your Email" 
+                value={Email || ""}
                 onChange={(e) => SetEmail(e.target.value)} 
               />
             </Field.Root>
@@ -82,7 +83,8 @@ history.push("/chats");
                   </Button> }>
               
                   <Input type={Show ? "text":"password"}
-                    placeholder="Enter Your Password" 
+                    placeholder="Enter Your Password"
+                    value={Password} 
                     onChange={(e) => SetPassword(e.target.value)} 
                     />
                   
