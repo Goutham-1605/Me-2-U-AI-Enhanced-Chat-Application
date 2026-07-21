@@ -5,6 +5,7 @@ import { ChatState } from '../Context/chatProvider';
 import { toaster } from './ui/toaster';
 import { FiPlus } from "react-icons/fi";
 import GroupChatModal from './miscellaneous/GroupChat';
+import { API_URL } from '../../config';
 
 const MyChats = () => {
   const {
@@ -19,7 +20,7 @@ const MyChats = () => {
   const fetchChats = async () => {
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const { data } = await axios.get("http://localhost:5000/api/chat", config);
+      const { data } = await axios.get(`${API_URL}/api/chat`, config);
       const unique = data.filter(
         (chat, index, self) => index === self.findIndex((c) => c._id === chat._id)
       );
@@ -45,7 +46,7 @@ const MyChats = () => {
     const fetchBlockedUsers = async () => {
       try {
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        const { data } = await axios.get("http://localhost:5000/api/user/blockedUsers", config);
+        const { data } = await axios.get(`${API_URL}/api/user/blockedUsers`, config);
         setBlockedUsers(data.blockedUsers || []);
       } catch (error) {
         console.error("Failed to fetch blocked users", error);
@@ -63,7 +64,7 @@ const MyChats = () => {
     setContextMenu(null);
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      await axios.delete(`http://localhost:5000/api/chat/${chat._id}`, config);
+      await axios.delete(`${API_URL}/api/chat/${chat._id}`, config);
       setChats(Chats.filter((c) => c._id !== chat._id));
       if (SelectedChat?._id === chat._id) setSelectedChat(null);
       toaster.create({ title: "Chat deleted", type: "success", duration: 3000 });
@@ -86,11 +87,11 @@ const MyChats = () => {
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
       if (isAlreadyBlocked) {
-        await axios.put("http://localhost:5000/api/user/unblock", { userToUnblockId: otherUser._id }, config);
+        await axios.put(`${API_URL}/api/user/unblock`, { userToUnblockId: otherUser._id }, config);
         setBlockedUsers(blockedUsers.filter((id) => id !== otherUser._id));
         toaster.create({ title: `${otherUser.Name} unblocked!`, type: "success", duration: 3000 });
       } else {
-        await axios.put("http://localhost:5000/api/user/block", { userToBlockId: otherUser._id }, config);
+        await axios.put(`${API_URL}/api/user/block`, { userToBlockId: otherUser._id }, config);
         setBlockedUsers([...blockedUsers, otherUser._id]);
         toaster.create({ title: `${otherUser.Name} blocked!`, type: "success", duration: 3000 });
       }

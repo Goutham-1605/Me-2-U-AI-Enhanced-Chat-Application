@@ -4,6 +4,7 @@ import { toaster } from '../ui/toaster';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { ChatState } from '../../Context/chatProvider';
+import { API_URL } from '../../config';
 
 const Login = () => {
   const [Email , SetEmail]= useState()
@@ -34,10 +35,10 @@ const Login = () => {
       };
 
       const { data } = await axios.post(
-        "http://localhost:5000/api/user/login",
-        { Email, Password },
-        config
-      );
+  `${API_URL}/api/user/login`,
+  { Email, Password },
+  config
+);
 
       toaster.create({
         title: "Login Successful",

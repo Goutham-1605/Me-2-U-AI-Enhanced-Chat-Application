@@ -4,8 +4,9 @@ import axios from 'axios';
 import io from 'socket.io-client';
 import { ChatState } from '../Context/chatProvider';
 import GroupInfoModal from './miscellaneous/GroupInfo';
+import { API_URL } from '../../config';
 
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = API_URL;
 let socket, selectedChatCompare;
 
 const THEMES = [
@@ -127,7 +128,7 @@ const SingleChat = () => {
       setLoading(true);
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
       const { data } = await axios.get(
-        `http://localhost:5000/api/message/${SelectedChat._id}`, config
+        `${API_URL}/api/message/${SelectedChat._id}`, config
       );
       setMessages(data);
       setLoading(false);
@@ -142,7 +143,7 @@ const SingleChat = () => {
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
       const { data } = await axios.get(
-        `http://localhost:5000/api/message/pin/${chatId}`, config
+        `${API_URL}/api/message/pin/${chatId}`, config
       );
       setPinnedMessage(data);
     } catch {
@@ -156,7 +157,7 @@ const SingleChat = () => {
         headers: { "Content-type": "application/json", Authorization: `Bearer ${user.token}` },
       };
       const { data } = await axios.put(
-        `http://localhost:5000/api/message/${msgId}/edit`,
+        `${API_URL}/api/message/${msgId}/edit`,
         { content: newContent }, config
       );
       setMessages((prev) => prev.map((m) => m._id === data._id ? data : m));
@@ -172,7 +173,7 @@ const SingleChat = () => {
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
       const { data } = await axios.delete(
-        `http://localhost:5000/api/message/${msgId}/delete`, config
+        `${API_URL}/api/message/${msgId}/delete`, config
       );
       setMessages((prev) => prev.map((m) => m._id === data._id ? data : m));
       socket.emit("message deleted", data);
@@ -187,7 +188,7 @@ const SingleChat = () => {
         headers: { "Content-type": "application/json", Authorization: `Bearer ${user.token}` },
       };
       await axios.post(
-        `http://localhost:5000/api/message/pin`,
+        `${API_URL}/api/message/pin`,
         { messageId: msg._id, chatId: SelectedChat._id }, config
       );
       setPinnedMessage(msg);
@@ -224,7 +225,7 @@ const SingleChat = () => {
         const config = {
           headers: { "Content-type": "application/json", Authorization: `Bearer ${user.token}` },
         };
-        const { data } = await axios.post("http://localhost:5000/api/message", {
+        const { data } = await axios.post(`${API_URL}/api/message`, {
           content: newMessage,
           chatId: SelectedChat._id,
         }, config);

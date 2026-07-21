@@ -7,9 +7,10 @@ import {
 import axios from 'axios';
 import { ChatState } from '../../Context/chatProvider';
 import { toaster } from '../ui/toaster';
+import { API_URL } from '../../config';
 
 const GroupInfoModal = ({ children }) => {
-  const socket = io("http://localhost:5000");
+  const socket = io(API_URL);
   const [open, setOpen] = useState(false);
   const [renameVal, setRenameVal] = useState("");
   const [renameLoading, setRenameLoading] = useState(false);
@@ -27,7 +28,7 @@ const GroupInfoModal = ({ children }) => {
   try {
     setRenameLoading(true);
     const config = { headers: { Authorization: `Bearer ${user.token}` } };
-    const { data } = await axios.put("http://localhost:5000/api/chat/rename", {
+    const { data } = await axios.put(`${API_URL}/api/chat/rename`, {
       chatId: SelectedChat._id,
       chatName: renameVal,
     }, config);
@@ -51,7 +52,7 @@ const GroupInfoModal = ({ children }) => {
     try {
       setSearchLoading(true);
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const { data } = await axios.get(`http://localhost:5000/api/user?search=${query}`, config);
+      const { data } = await axios.get(`${API_URL}/api/user?search=${query}`, config);
       setSearchResult(data);
     } catch (error) {
       toaster.create({ title: "Failed to search users", type: "error", duration: 3000 });
@@ -68,7 +69,7 @@ const GroupInfoModal = ({ children }) => {
   }
   try {
     const config = { headers: { Authorization: `Bearer ${user.token}` } };
-    const { data } = await axios.put("http://localhost:5000/api/chat/groupAdd", {
+    const { data } = await axios.put(`${API_URL}/api/chat/groupAdd`, {
       chatId: SelectedChat._id,
       userId: userToAdd._id,
     }, config);
@@ -89,7 +90,7 @@ const GroupInfoModal = ({ children }) => {
   const handleRemoveUser = async (userToRemove) => {
   try {
     const config = { headers: { Authorization: `Bearer ${user.token}` } };
-    const { data } = await axios.put("http://localhost:5000/api/chat/groupRemove", {
+    const { data } = await axios.put(`${API_URL}/api/chat/groupRemove`, {
       chatId: SelectedChat._id,
       userId: userToRemove._id,
     }, config);
@@ -107,7 +108,7 @@ const GroupInfoModal = ({ children }) => {
   const leaveGroup = async () => {
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      await axios.put("http://localhost:5000/api/chat/groupRemove", {
+      await axios.put(`${API_URL}/api/chat/groupRemove`, {
         chatId: SelectedChat._id,
         userId: user._id,
       }, config);
@@ -125,7 +126,7 @@ const GroupInfoModal = ({ children }) => {
   const deleteGroup = async () => {
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      await axios.delete(`http://localhost:5000/api/chat/group/${SelectedChat._id}`, config);
+      await axios.delete(`${API_URL}/api/chat/group/${SelectedChat._id}`, config);
 
       setSelectedChat(null);
       setChats(Chats.filter((c) => c._id !== SelectedChat._id));

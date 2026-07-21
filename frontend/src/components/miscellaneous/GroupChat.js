@@ -10,6 +10,7 @@ import {
 import axios from 'axios';
 import { ChatState } from '../../Context/chatProvider';
 import { toaster } from '../ui/toaster';
+import { API_URL } from '../../config';
 
 const GroupChatModal = ({ children }) => {
   const [open, setOpen] = useState(false);
@@ -30,7 +31,7 @@ const GroupChatModal = ({ children }) => {
       const config = {
         headers: { Authorization: `Bearer ${user.token}` },
       };
-      const { data } = await axios.get(`http://localhost:5000/api/user?search=${query}`, config);
+      const { data } = await axios.get(`${API_URL}/api/user?search=${query}`, config);
       setSearchResult(data);
       setLoading(false);
     } catch (error) {
@@ -82,7 +83,7 @@ const GroupChatModal = ({ children }) => {
       const config = {
         headers: { Authorization: `Bearer ${user.token}` },
       };
-      const { data } = await axios.post("http://localhost:5000/api/chat/group", {
+      const { data } = await axios.post(`${API_URL}/api/chat/group`, {
         Name: groupChatName,
         users: JSON.stringify(selectedUsers.map((u) => u._id)),
       }, config);

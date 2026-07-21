@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "../config";
 
 const ChatContext = createContext();
 
@@ -43,7 +44,7 @@ const ChatProvider = ({ children }) => {
       const parsedUser = JSON.parse(userInfo);
       setUser(parsedUser);
 
-      axios.get("http://localhost:5000/api/user/blockedUsers", {
+      axios.get(`${API_URL}/api/user/blockedUsers`, {
         headers: { Authorization: `Bearer ${parsedUser.token}` },
       }).then(({ data }) => {
         setBlockedUsers(data.blockedUsers || []);

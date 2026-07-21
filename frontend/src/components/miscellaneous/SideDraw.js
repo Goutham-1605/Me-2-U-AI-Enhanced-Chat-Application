@@ -8,6 +8,7 @@ import { ChatState } from '../../Context/chatProvider';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { toaster } from '../ui/toaster';
+import { API_URL } from '../../config';
 
 const SideDrawer = () => {
   const [search, setSearch] = useState("");
@@ -32,7 +33,7 @@ const SideDrawer = () => {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.post("http://localhost:5000/api/chat", { userId }, config);
+      const { data } = await axios.post(`${API_URL}/api/chat`, { userId }, config);
       const chatList = Array.isArray(Chats) ? Chats : [];
       if (!chatList.find((c) => c._id === data._id)) {
         setChats([data, ...chatList]);
@@ -60,7 +61,7 @@ const SideDrawer = () => {
     try {
       setLoading(true);
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const { data } = await axios.get(`http://localhost:5000/api/user?search=${search}`, config);
+      const { data } = await axios.get(`${API_URL}/api/user?search=${search}`, config);
       setSearchResult(data);
       setLoading(false);
     } catch (error) {
