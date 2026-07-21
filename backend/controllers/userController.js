@@ -30,14 +30,17 @@ const RegisterUser = expressAsyncHandler(async (req, res) => {
   });
 
   if (user) {
-    await sendVerificationEmail(Email, token);
-    res.status(201).json({
-      message: "Registration successful! Please check your email to verify your account.",
-    });
-  } else {
-    res.status(400);
-    throw new Error("Failed to create User");
-  }
+  res.status(201).json({
+    message: "Registration successful! Please check your email to verify your account.",
+  });
+
+  sendVerificationEmail(Email, token).catch((err) => {
+    console.error("Failed to send verification email:", err.message);
+  });
+} else {
+  res.status(400);
+  throw new Error("Failed to create User");
+}
 });
 
 const verifyEmail = expressAsyncHandler(async (req, res) => {
