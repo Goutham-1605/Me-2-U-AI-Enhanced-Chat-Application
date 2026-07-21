@@ -20,14 +20,14 @@ app.use(express.json());
 
 
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: process.env.CLIENT_URL,
   credentials: true,
-}));
+}));;
 
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: process.env.CLIENT_URL,
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -166,5 +166,5 @@ io.on("connection", (socket) => {
   });
 });
 
-const Port = process.env.Port || 5000;
-server.listen(Port, () => { console.log(`Server started at port ${Port}`); });
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => { console.log(`Server started at port ${PORT}`); });
