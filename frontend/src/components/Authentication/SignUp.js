@@ -167,6 +167,9 @@ const SignUp = () => {
       >
         Sign Up
       </Button>
+      <Text fontSize="xs" color="gray.500" textAlign="center">
+  Note: Email verification is currently experiencing delivery delays. You can log in immediately after signing up.
+</Text>
     </VStack>
   );
 }

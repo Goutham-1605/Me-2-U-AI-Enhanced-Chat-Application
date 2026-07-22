@@ -79,10 +79,9 @@ const authUser = expressAsyncHandler(async (req, res) => {
     throw new Error("Invalid Email or Password");
   }
 
-  if (!user.isVerified) {
-    res.status(401);
-    throw new Error("Please verify your email before logging in");
-  }
+  //if (!user.isVerified) {
+   // res.status(401);
+    //throw new Error("Please verify your email before logging in");}
 
   if (await user.matchPassword(Password)) {
     res.status(200).json({
